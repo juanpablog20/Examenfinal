@@ -1,0 +1,119 @@
+Scripts 
+
+
+Punto 1
+
+
+Vagrantfile
+
+Vagrant.configure("2") do |config|
+  if Vagrant.has_plugin? "vagrant-vbguest"
+  config.vbguest.no_install = true
+  config.vbguest.auto_update = false
+  config.vbguest.no_remote = true
+  end
+  config.vm.define :servidor do |servidor|
+  servidor.vm.box = "centos/stream8"
+  servidor.vm.network :private_network, ip: "192.168.50.3"
+  servidor.vm.hostname = "servidor"
+  end
+ end
+
+
+Servidor scripts
+
+ 1  yum install wget
+    2  wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+    3  rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
+    4  yum install mysql-server
+    5  grep '1234' /var/log/mysqld.log
+    6  mysql_secure_installation
+    7  systemctl start mysqld
+    8  systemctl status mysqld
+    9  grep 'password' /var/log/mysqld.log
+   10  mysql_secure_installation
+   11  mysql -u root -p
+   12  yum install git
+   13  curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
+   14  yum install -y nodejs
+   15  git clone https://github.com/juanpablog20/Examenfinal
+   16  ls
+   17  cd Examenfinal/
+   18  node index.js
+   19  pwd
+   20  node index.js
+   21  exit
+
+Punto 2
+
+Vagrantfile
+
+
+Vagrant.configure("2") do |config|
+config.vm.define :firewall1 do |firewall1|
+firewall1.vm.box = "bento/centos-7"
+firewall1.vm.network :private_network, ip: "209.191.50.3"
+firewall1.vm.network :public_network, bridge: "Realtek 8822CE Wireless LAN 802.11ac PCI-E NIC", ip: "192.168.10.29"
+firewall1.vm.network :forwarded_port, guest: 80, host: 8000
+firewall1.vm.hostname = "firewall1"
+end
+config.vm.define :servidorSTRM do |servidorSTRM|
+servidorSTRM.vm.box = "bento/centos-7"
+#servidorSTRM.vm.network :public_network, bridge: "Realtek 8822CE Wireless LAN 802.11ac PCI-E NIC", ip: "192.168.10.30"
+servidorSTRM.vm.network :private_network, ip: "192.168.50.2"
+servidorSTRM.vm.hostname = "servidorSTRM"
+end
+end
+
+
+ServidorSTRM 
+
+ 1  yum -y update
+    2  yum install wget -y
+    3  wget --no-cookies --no-check-certificate --header "Cookie:oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm"
+    4  yum -y localinstall jdk-8u131-linux-x64.rpm
+    5  wget https://github.com/dularion/streama/releases/download/v1.1/streama-1.1.war
+    6  mkdir /opt/streama
+    7  mv streama-1.1.war /opt/streama/streama.war
+    8  mkdir /opt/streama/media
+    9  chmod 664 /opt/streama/media
+   10  vim /etc/systemd/system/streama.service
+   11  yum install vim
+   12  vim /etc/systemd/system/streama.service
+   13  service streama start
+   14  systemctl enable streama
+   15  service streama restart
+   16  cd
+   17  ls
+   18  pwd
+   19  cd
+   20  ls
+   21  mkdir videos
+   22  ls
+   23  cd videos/
+   24  pwd
+   25  exit
+   26  history
+   27  service streama start
+   28  exit
+
+firewall 
+
+
+    1  service NetworkManager stop
+    2  chkconfig NetworkManager off
+    3  sysctl -w net.ipv4.ip_forward=1
+    4  service firewalld start
+    5  chkconfig firewalld on
+    6  firewall-cmd --permanent --zone=public --add-service=http
+    7  firewall-cmd --permanent --zone=public --add-port=80/tcp
+    8  firewall-cmd --permanent --zone=public --add-port=8080/tcp
+    9  firewall-cmd --permanent --zone=public --add-masquerade
+   10  firewall-cmd --permanent --zone=public --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.50.2
+   11  firewall-cmd --zone=public --add-service=steam-streaming
+   12  firewall-cmd --reload
+   13  mkdir videos
+   14  ls
+   15  exit
+
+
